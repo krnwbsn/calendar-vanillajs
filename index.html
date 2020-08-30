@@ -15,7 +15,7 @@
         max-width: 600px;
       }
       .month {
-        padding: 70px 25px;
+        padding: 25px 25px;
         width: 100%;
         text-align: center;
       }
@@ -23,7 +23,7 @@
         margin: 0;
         padding: 0;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr;
       }
       .month ul li {
@@ -55,11 +55,13 @@
         border: 1px solid #ccc;
       }
       #days li.active {
-        background: #1abc9c;
+        background: #000;
         color: white !important;
       }
-      #next,
-      #prev {
+      #nextYear,
+      #prevYear,
+      #nextMonth,
+      #prevMonth {
         cursor: pointer;
       }
       #days,
@@ -74,10 +76,14 @@
     <div id="calendar">
       <div class="month">
         <ul>
-          <li id="prev">&#10094;</li>
-          <li id="month"></li>
+          <li id="prevYear">&#10094;</li>
           <li id="year"></li>
-          <li id="next">&#10095;</li>
+          <li id="nextYear">&#10095;</li>
+        </ul>
+        <ul>
+          <li id="prevMonth">&#10094;</li>
+          <li id="month"></li>
+          <li id="nextMonth">&#10095;</li>
         </ul>
       </div>
       <ul id="weekdays">
@@ -111,15 +117,25 @@
         'November',
         'December',
       ];
-      let nextButton = document.getElementById('next');
-      let prevButton = document.getElementById('prev');
+      let nextYearButton = document.getElementById('nextYear');
+      let prevYearButton = document.getElementById('prevYear');
+      let nextMonthButton = document.getElementById('nextMonth');
+      let prevMonthButton = document.getElementById('prevMonth');
 
-      nextButton.onclick = () => {
-        handleNext();
+      nextYearButton.onclick = () => {
+        handleNextYear();
       };
-      
-      prevButton.onclick = () => {
-        handlePrev();
+
+      prevYearButton.onclick = () => {
+        handlePrevYear();
+      };
+
+      nextMonthButton.onclick = () => {
+        handleNextMonth();
+      };
+
+      prevMonthButton.onclick = () => {
+        handlePrevMonth();
       };
 
       showCalendar(month, year);
@@ -130,11 +146,15 @@
         let total = daysInMonth(month, year);
         blankDates(firstDay);
 
-        for (let i = 0; i <= total; i++) {
+        for (let i = 1; i <= total; i++) {
           let cell = document.createElement('li');
           let cellText = document.createTextNode(i);
 
-          if (day === i && month === today.getMonth() && year === today.getFullYear()) {
+          if (
+            day === i &&
+            month === today.getMonth() &&
+            year === today.getFullYear()
+          ) {
             cell.classList.add('active');
           }
           cell.setAttribute('data-day', i);
@@ -147,13 +167,13 @@
 
         document.getElementById('month').innerHTML = months[month];
         document.getElementById('year').innerHTML = year;
-      };
+      }
 
-      function daysInMonth(month, year){
+      function daysInMonth(month, year) {
         return new Date(year, month + 1, 0).getDate();
       }
 
-      function blankDates(count){
+      function blankDates(count) {
         for (let i = 0; i < count; i++) {
           let cell = document.createElement('li');
           let cellText = document.createTextNode('');
@@ -162,14 +182,22 @@
         }
       }
 
-      function handleNext() {
-        year = month === 11 ? year + 1 : year;
+      function handleNextYear() {
+        year = year + 1;
+        showCalendar(month, year);
+      }
+
+      function handlePrevYear() {
+        year = year - 1;
+        showCalendar(month, year);
+      }
+
+      function handleNextMonth() {
         month = (month + 1) % 12;
         showCalendar(month, year);
       }
 
-      function handlePrev() {
-        year = month === 0 ? year - 1 : year;
+      function handlePrevMonth() {
         month = month === 0 ? 11 : month - 1;
         showCalendar(month, year);
       }
