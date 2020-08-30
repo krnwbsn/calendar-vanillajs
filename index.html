@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar Vanilla.js</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      ul {
+        list-style-type: none;
+      }
+      #calendar {
+        max-width: 600px;
+      }
+      .month {
+        padding: 70px 25px;
+        width: 100%;
+        text-align: center;
+      }
+      .month ul {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+      }
+      .month ul li {
+        color: #000;
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+      #weekdays {
+        margin: 0;
+        padding: 10px 0;
+        background-color: #ddd;
+      }
+      #weekdays li {
+        color: #666;
+        text-align: center;
+      }
+      #days {
+        padding: 10px 0;
+        background: #eee;
+        margin: 0;
+      }
+      #days li {
+        list-style-type: none;
+        text-align: center;
+        font-size: 16px;
+        color: #777;
+        padding: 15px;
+        border: 1px solid #ccc;
+      }
+      #days li.active {
+        background: #1abc9c;
+        color: white !important;
+      }
+      #next,
+      #prev {
+        cursor: pointer;
+      }
+      #days,
+      #weekdays {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="calendar">
+      <div class="month">
+        <ul>
+          <li id="prev">&#10094;</li>
+          <li id="month"></li>
+          <li id="year"></li>
+          <li id="next">&#10095;</li>
+        </ul>
+      </div>
+      <ul id="weekdays">
+        <li>Su</li>
+        <li>Mo</li>
+        <li>Tu</li>
+        <li>We</li>
+        <li>Th</li>
+        <li>Fr</li>
+        <li>Sa</li>
+      </ul>
+      <ul id="days"></ul>
+    </div>
+    <script>
+      let today = new Date();
+      let day = today.getDate();
+      let month = today.getMonth();
+      let year = today.getFullYear();
+      let calendar = document.getElementById('days');
+      let months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      let nextButton = document.getElementById('next');
+      let prevButton = document.getElementById('prev');
+
+      nextButton.onclick = () => {
+        handleNext();
+      };
+      prevButton.onclick = () => {
+        handlePrev();
+      };
+
+      showCalendar(month, year);
+
+      function showCalendar(month, year) {
+        let firstDay = new Date(year, month).getDay();
+        calendar.innerHTML = '';
+        let total = daysInMonth(month, year);
+        blankDates(firstDay);
+
+        for (let i = 0; i <= total; i++) {
+          let cell = document.createElement('li');
+          let cellText = document.createTextNode(i);
+
+          if (day === i && month === today.getMonth() && year === today.getFullYear()) {
+            cell.classList.add('active');
+          }
+          cell.setAttribute('data-day', i);
+          cell.setAttribute('data-month', month);
+          cell.setAttribute('data-year', year);
+          cell.classList.add('singleDay');
+          cell.appendChild(cellText);
+          calendar.appendChild(cell);
+        }
+
+        document.getElementById('month').innerHTML = months[month];
+        document.getElementById('year').innerHTML = year;
+      };
+
+      function daysInMonth(month, year){
+        return new Date(year, month + 1, 0).getDate();
+      }
+
+      function blankDates(count){
+        for (let i = 0; i < count; i++) {
+          let cell = document.createElement('li');
+          let cellText = document.createTextNode('');
+          cell.appendChild(cellText);
+          calendar.appendChild(cell);
+        }
+      }
+
+      function handleNext() {
+        year = month === 11 ? year + 1 : year;
+        month = (month + 1) % 12;
+        showCalendar(month, year);
+      }
+
+      function handlePrev() {
+        year = month === 0 ? year - 1 : year;
+        month = month === 0 ? 11 : month - 1;
+        showCalendar(month, year);
+      }
+    </script>
+  </body>
+</html>
