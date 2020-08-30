@@ -15,7 +15,7 @@
         max-width: 600px;
       }
       .month {
-        padding: 25px 25px;
+        padding: 25px;
         width: 100%;
         text-align: center;
       }
@@ -32,17 +32,17 @@
         text-transform: uppercase;
         letter-spacing: 3px;
       }
-      #weekdays {
+      #week {
         margin: 0;
         padding: 10px 0;
         background-color: #ddd;
       }
-      #weekdays li {
+      #week li {
         color: #666;
         text-align: center;
       }
       #days {
-        padding: 10px 0;
+        padding: 0;
         background: #eee;
         margin: 0;
       }
@@ -65,7 +65,7 @@
         cursor: pointer;
       }
       #days,
-      #weekdays {
+      #week {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-template-rows: 1fr;
@@ -86,7 +86,7 @@
           <li id="nextMonth">&#10095;</li>
         </ul>
       </div>
-      <ul id="weekdays">
+      <ul id="week">
         <li>Su</li>
         <li>Mo</li>
         <li>Tu</li>
@@ -157,10 +157,10 @@
           ) {
             cell.classList.add('active');
           }
-          cell.setAttribute('data-day', i);
-          cell.setAttribute('data-month', month);
-          cell.setAttribute('data-year', year);
-          cell.classList.add('singleDay');
+          cell.setAttribute('day', i);
+          cell.setAttribute('month', month);
+          cell.setAttribute('year', year);
+          cell.classList.add('day');
           cell.appendChild(cellText);
           calendar.appendChild(cell);
         }
